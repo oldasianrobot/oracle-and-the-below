@@ -23,7 +23,7 @@ Deno.serve(async(req:Request)=>{
  const {data:reservation,error}=await client.rpc('reserve_oracle_dialogue',{p_course:course_id,p_request:request_id,p_message:message.trim()});
  if(error)return json({error:error.message},400);
  if(reservation.cached)return json(reservation.cached);
- if(!reservation.allowed)return json({reply:fallbackReply,source:'authored',reason:reservation.reason});
+ if(!reservation.allowed)return json({reply:fallbackReply,source:'authored',saved:false,reason:reservation.reason});
  const result=await generateReply({key:Deno.env.get('OPENROUTER_API_KEY'),model:Deno.env.get('OPENROUTER_MODEL')||'openrouter/free',history:reservation.history||[],message:reservation.message});
  const admin=createClient(url,serviceKey,{auth:{persistSession:false}});
  const {error:saveError}=await admin.rpc('finish_oracle_dialogue',{p_request:request_id,p_result:result});

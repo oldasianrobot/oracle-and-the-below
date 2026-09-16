@@ -4,13 +4,13 @@ A short, asynchronous classroom game about human labor behind AI. Built for uplo
 
 ## Current delivery status
 
-The visual edition adds real photographs, circled-object description, label correction, A/B/C shape selection, and a three-image beauty judgment. AI sharing consent is remembered per user and class on the same browser, with a withdrawal control. The optional OpenRouter-powered payment appeal remains. See [AI setup](AI-SETUP.md) for the migration and protected server function.
+The visual edition adds real photographs, circled-object description, label correction, A/B/C shape selection, and three separate beauty assignments (three paintings, three flower scenes, and three sculptures). AI sharing consent is remembered per user and class on the same browser, with a withdrawal control. MAX, a sometimes useful, distracted, or cranky fictional 80-year-old advocate, is available from the first assignment. See [AI setup](AI-SETUP.md) for the migration and protected server function.
 
 - Full nine-assignment game, three acts, three ending routes, four generated illustrations with crossfades.
 - Device-local practice, ledger, reflection, downloadable receipt.
 - Supabase email-link sign-in, class membership, authoritative submissions, completion records, class totals, instructor CSV implemented.
 - Database functions tested in local PostgreSQL-compatible PGlite; full practice journey checked in the browser.
-- Supabase database and `oracle-dialogue` function installed in project `okprvvuvxjpcoydhjnds`; public connection settings configured. Instructor email sign-in and class ownership are verified. Instructor-screen access, classroom email delivery, and an actual AI exchange still require end-to-end verification. The updated website has not yet been uploaded to the production host.
+- Supabase database and `oracle-dialogue` function installed in project `okprvvuvxjpcoydhjnds`; public connection settings configured. Instructor email sign-in and class ownership are verified. The instructor reported completing the game and receiving live AI replies. Classroom email delivery still requires verification. The updated website has not yet been uploaded to the production host.
 
 ## Preview
 
@@ -23,7 +23,7 @@ The visual edition adds real photographs, circled-object description, label corr
 ## Activate classroom records
 
 1. Create a Supabase project under your own account. Review its current terms and pricing yourself before accepting them.
-2. Run `backend/schema.sql` once in that project's SQL Editor. Then run `backend/outcomes.sql`, followed by `backend/002-writing-and-dialogue.sql`. Use a dedicated project or check for name conflicts before running migrations.
+2. Run `backend/schema.sql` once in that project's SQL Editor. Then run `backend/outcomes.sql`, followed by `backend/002-writing-and-dialogue.sql` and `backend/003-visual-max.sql`. Use a dedicated project or check for name conflicts before running migrations.
 3. In Authentication URL Configuration, set the final game URL (including trailing slash) as the Site URL and an allowed redirect. During local testing, additionally allow `http://127.0.0.1:5188/`. Remove that local redirect when no longer needed.
 4. Configure production email delivery in Supabase. Its default email service is restricted and is not suitable for a class of arbitrary recipients. Configure your own SMTP provider; verify delivery to a student test account. Check current limits and costs before enabling classroom use.
 5. Put the project's public URL and **publishable key** (or legacy anon key) in `public/config.js`, then rebuild. Alternatively edit `config.js` in the finished upload folder. **Never use a service-role key or secret key in browser files.** Public keys are protected by database permissions; changing the UI does not grant instructor access.
@@ -45,7 +45,7 @@ A class can be closed by setting `active = false` in `oracle_courses`; saved rec
 
 ## Grading and privacy
 
-The visual edition records responses for all nine assignments. Most use writing (10–1,500 characters); assignment three uses A/B/C shape selection, assignment four records three beauty judgments plus an explanation, and assignment seven retains a route selector because that choice drives the ending. Fixed story payments do not evaluate the writing. Optional AI exchanges do not affect completion or pay.
+The visual edition records responses for all nine assignments. Most use writing (10–1,500 characters); assignment three uses A/B/C shape selection, assignments four through six each record three beauty judgments plus a category-specific explanation, and assignment seven retains a route selector because that choice drives the ending. Fixed story payments do not evaluate the writing. Optional AI exchanges do not affect completion or pay.
 
 The app records completion, not an automatically awarded grade. Completion requires nine distinct ordered submissions plus a trimmed reflection of 40–5000 characters. This length check does not assess reflection quality. Earnings, speed, and response choices are not grading criteria. Instructors make final grading decisions.
 
@@ -55,7 +55,7 @@ A static page can always be inspected or automated by a determined student. Serv
 
 ## Teaching notes
 
-Students interpret fictional evidence; only the optional Help Moth conversation calls an AI model when connected. The fixed ledger amounts and reform effects are invented for comparison. Revenue is not profit. Assignment 2 supplies a locomotive-label correction for comparison and fixed story pay; it does not automatically score free text. Assignment 4 is an explicitly scripted rejection regardless of the three beauty judgments or written explanation, demonstrating withheld standards. Assignment 7 offers a hypothetical individual branch, not an actual vote or a live negotiation among classmates. An appeal can release prior approved pay without changing future rates; negotiated prospective payment does not erase past unpaid work.
+Students interpret fictional evidence; only the optional MAX conversation calls an AI model when connected. The fixed ledger amounts and reform effects are invented for comparison. Revenue is not profit. Assignment 2 supplies a locomotive-label correction for comparison and fixed story pay; it does not automatically score free text. Assignments 4–6 each reject the work regardless of the selected judgments, demonstrating withheld standards; this is documented here for instructors, not explained in the in-game rejection. Assignment 7 offers a hypothetical individual branch, not an actual vote or a live negotiation among classmates. The outside review remains pending and releases no payment; negotiated prospective payment does not erase past rejections. The revised version offers 60 crowns total and pays 36 on route A or 24 on routes B/C.
 
 All four Oracle stages follow individual progress (0, 3, 6, 9 assignments). Class totals are cumulative and refreshed after submissions or on request. Crossfades respect reduced-motion preferences. No timer, sound, or student accounts are needed for practice.
 
@@ -72,12 +72,12 @@ Rebecca Tan and Regine Cabato, “Behind the AI boom, an army of overseas worker
 
 ## Updating tasks
 
-Edit `src/game.js`; run `node scripts/seed-outcomes.js`; review and apply the new `backend/outcomes.sql`; then rebuild. Existing saved responses retain their original results. For substantive task changes, create a new class/version rather than mixing versions in one graded cohort.
+Edit `src/visual.js`; run `node scripts/seed-visual-outcomes.js`; review and apply `backend/003-visual-max.sql`; then rebuild. Existing saved responses retain their original results. For substantive task changes, create a new class/version rather than mixing versions in one graded cohort.
 
 Illustration provenance and prompts: `ARTWORK.md`.
 
 ## Visual edition compatibility
 
-`src/visual.js` supplies the new prompts and presentation feedback; the original task definitions remain for interpreting earlier records. New responses include an edition marker, task title, and all selected labels in the existing response field. The server still controls fixed accounting and completion. No database reset or migration is required. Earlier records are not overwritten. Practice uses a new storage key, leaving old practice data intact. Use a new class for a new cohort rather than mixing editions within a graded cohort.
+`src/visual.js` supplies the new prompts and presentation feedback; the original task definitions remain for interpreting earlier records. New responses include an edition marker, task title, and all selected labels in the existing response field. The server still controls fixed accounting and completion. Apply `backend/003-visual-max.sql` for version 3; it adds an authoritative visual submission endpoint and makes MAX available before assignment six. No database reset is required. Earlier records are not overwritten. Partly completed earlier editions cannot mix with version 3 submissions; use a new class for those players. Completed records remain readable. Practice uses a new storage key, leaving old practice data intact. Use a new class for a new cohort rather than mixing editions within a graded cohort.
 
-Beauty judgments are subjective and receive a clearly explained scripted rejection regardless of the selections. Shape answers are recorded and followed by an authored explanation; no answer affects participation credit. Photographs include descriptive alternative text and full-size links. Image credits and reuse terms ship in `public/assignments/CREDITS.md` and appear alongside each photograph.
+Beauty judgments are subjective and receive the client rejection regardless of the selections. Shape answers are recorded and followed by an authored explanation; no answer affects participation credit. Photographs include descriptive alternative text and full-size links. Image credits and reuse terms ship in `public/assignments/CREDITS.md` and appear alongside each photograph.

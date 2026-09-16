@@ -2,13 +2,13 @@
 
 ## What is ready
 
-The visual edition records image descriptions, A/B/C shape choices, three independent beauty judgments, and the story-route selection. Choices and writing are stored together in the existing response field. AI consent is remembered per user/class on the same browser and may be withdrawn before a later message. After assignment six, students can optionally converse with the Help Moth. All ordinary assignments and the final reflection stay within the class database. Only messages students explicitly send to the Help Moth, plus earlier exchanges in that conversation, go to OpenRouter and the selected model provider.
+The visual edition records image descriptions, A/B/C shape choices, three beauty assignments with three judgments each, and the story-route selection. Choices and writing are stored together in the existing response field. AI consent is remembered per user/class on the same browser and may be withdrawn before a later message. From the first assignment, students can optionally converse with MAX. All ordinary assignments and the final reflection stay within the class database. Only messages students explicitly send to the MAX, plus earlier exchanges in that conversation, go to OpenRouter and the selected model provider.
 
-Practice mode uses labeled authored dialogue and never calls OpenRouter. The live integration requires the following setup. It has been tested with simulated provider responses and a local PostgreSQL-compatible database; a real account call remains to be verified after connection.
+Practice mode uses labeled authored dialogue and never calls OpenRouter. The live integration requires the following setup. It has been tested with simulated provider responses and a local PostgreSQL-compatible database; the instructor has reported receiving live AI replies in the previous edition.
 
 ## Connected project status
 
-On September 15, 2026, all three SQL files were installed in project `okprvvuvxjpcoydhjnds`, and `oracle-dialogue` was deployed through the dashboard. The dashboard copy inlines `dialogue.js` into `index.ts`; the repository keeps the equivalent two-file source for CLI deployments. The legacy gateway JWT check is off; in-function user verification remains required. Allowed origins are configured for `https://mleungphd.org` and `http://127.0.0.1:5188`. The OpenRouter key has been saved by the project owner. An unauthenticated request to the deployed function returned the expected 401 with “Sign in first.” The temporary Auth Site URL is `http://127.0.0.1:5188/`; change this to the final hosted game address before classroom use. The instructor successfully followed the email sign-in link. The database confirms a verified instructor account and its ownership of Social Problems — Fall 2026. Instructor-screen access and a real signed-in AI exchange still need verification. Custom SMTP is currently disabled, so classroom email delivery must be configured and tested before rollout.
+On September 15, 2026, all three SQL files were installed in project `okprvvuvxjpcoydhjnds`, and `oracle-dialogue` was deployed through the dashboard. The dashboard copy inlines `dialogue.js` into `index.ts`; the repository keeps the equivalent two-file source for CLI deployments. The legacy gateway JWT check is off; in-function user verification remains required. Allowed origins are configured for `https://mleungphd.org` and `http://127.0.0.1:5188`. The OpenRouter key has been saved by the project owner. An unauthenticated request to the deployed function returned the expected 401 with “Sign in first.” The temporary Auth Site URL is `http://127.0.0.1:5188/`; change this to the final hosted game address before classroom use. The instructor successfully followed the email sign-in link. The database confirms a verified instructor account and its ownership of Social Problems — Fall 2026. The instructor subsequently reported completing the game and receiving live AI replies. Custom SMTP is currently disabled, so classroom email delivery must be configured and tested before rollout.
 
 ## 1. Prepare the database
 
@@ -17,8 +17,9 @@ For a new project, run these in the Supabase SQL Editor in order:
 1. `backend/schema.sql`
 2. `backend/outcomes.sql`
 3. `backend/002-writing-and-dialogue.sql`
+4. `backend/003-visual-max.sql`
 
-For a project with the original game already installed, run only the third file. It preserves existing submissions. The migration replaces direct multiple-choice submission access with validated written submission access. New writing is required to be 10–2,000 characters. Existing completed records are preserved rather than reset.
+For a project with the original game already installed, run the third file if not yet installed, followed by the fourth file. It preserves existing submissions. The migration replaces direct multiple-choice submission access with validated written submission access. New writing is required to be 10–2,000 characters. Existing completed records are preserved rather than reset.
 
 ## 2. Keep secrets on the server
 
@@ -65,7 +66,7 @@ Use a value consistent with your account's actual allowance and other usage. The
 
 ## 5. Verify before class
 
-- Sign in with a test student, join the class, submit six written assignments, then send a fictional appeal.
+- Sign in with a test student, join the class, send a message to MAX before submitting the first assignment, then complete the revised visual sequence.
 - Confirm the reply says **AI reply** and the conversation is readable in instructor records. Confirm the ledger and participation totals did not change because of dialogue.
 - Test fallback and blocked fourth exchange. Check that a second student cannot see the first student's messages.
 - Inspect OpenRouter usage to confirm the actual model and zero charge.
@@ -78,3 +79,7 @@ Student messages can influence the model despite role instructions. The model ha
 - OpenRouter request API: https://openrouter.ai/docs/api-reference/overview
 - OpenRouter provider price and data controls: https://openrouter.ai/docs/guides/routing/provider-selection
 - Supabase protected function settings: https://supabase.com/docs/guides/functions/secrets
+
+## Visual edition 3 update
+
+The September 16 update adds category-specific beauty assignments and MAX throughout. Migration 003 and the revised MAX function were deployed to the connected project on September 16; a post-deployment unauthenticated request returned the expected 401. For another project, apply 003 after 002, then redeploy the function. MAX has up to three exchanges for the whole exercise, with the same free-only routing and privacy settings. A new practice storage key preserves older practice. The migration preserves existing class submissions and rejects mixing an unfinished older record with the revised sequence.
