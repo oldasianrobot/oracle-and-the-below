@@ -10,7 +10,7 @@ Version 1.1 adds written responses and an optional OpenRouter-powered payment ap
 - Device-local practice, ledger, reflection, downloadable receipt.
 - Supabase email-link sign-in, class membership, authoritative submissions, completion records, class totals, instructor CSV implemented.
 - Database functions tested in local PostgreSQL-compatible PGlite; full practice journey checked in the browser.
-- Supabase database and `oracle-dialogue` function installed in project `okprvvuvxjpcoydhjnds`; public connection settings configured. Live email sign-in, instructor setup, and an actual AI exchange still require end-to-end verification. The updated website has not yet been uploaded to the production host.
+- Supabase database and `oracle-dialogue` function installed in project `okprvvuvxjpcoydhjnds`; public connection settings configured. Instructor email sign-in and class ownership are verified. Instructor-screen access, classroom email delivery, and an actual AI exchange still require end-to-end verification. The updated website has not yet been uploaded to the production host.
 
 ## Preview
 
