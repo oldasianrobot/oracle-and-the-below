@@ -1,0 +1,3 @@
+[functions.oracle-dialogue]
+# The function validates the user's JWT using auth.getUser before any work.
+verify_jwt = false

@@ -1,0 +1,48 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {PGlite} from '@electric-sql/pglite';
+const uid='00000000-0000-0000-0000-000000000001',other='00000000-0000-0000-0000-000000000002';
+test('written records, AI budgets, cached calls and private transcript permissions',async()=>{
+ const db=new PGlite();
+ await db.exec(`create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key,email text); create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated;`);
+ for(const file of ['schema.sql','outcomes.sql','002-writing-and-dialogue.sql'])await db.exec(readFileSync(new URL('../backend/'+file,import.meta.url),'utf8'));
+ await db.query('insert into auth.users values($1,$2),($3,$4)',[uid,'teacher@example.test',other,'student@example.test']);
+ const c=(await db.query("insert into public.oracle_courses(name,join_code,instructor_id) values('Class','long-random-test-code',$1) returning id",[uid])).rows[0].id;
+ await db.exec('set role authenticated');await db.query("select set_config('request.jwt.claim.sub',$1,false)",[uid]);
+ await db.query("select public.join_course('long-random-test-code')");
+ await assert.rejects(()=>db.query('select public.submit_task($1,1,0)',[c]),/permission denied/);
+ await assert.rejects(()=>db.query('select public.submit_written_task($1,1,$2)',[c,'short']),/10/);
+ await assert.rejects(()=>db.query('select public.reserve_oracle_dialogue($1,$2,$3)',[c,crypto.randomUUID(),'Pay the approved ten crowns.']),/Complete/);
+ for(let i=1;i<=6;i++)await db.query('select public.submit_written_task($1,$2,$3)',[c,i,'This is my original written judgment for assignment '+i]);
+ const again=(await db.query('select public.submit_written_task($1,1,$2) as r',[c,'A different response should not replace the first.'])).rows[0].r;
+ assert.match(again.response,/original written/);
+ const request=crypto.randomUUID();
+ const reserve=async(id=request)=> (await db.query('select public.reserve_oracle_dialogue($1,$2,$3) as r',[c,id,'Please explain why my ten crowns have not arrived.'])).rows[0].r;
+ assert.equal((await reserve()).allowed,true);
+ assert.equal((await reserve()).allowed,false);
+ assert.equal((await reserve(crypto.randomUUID())).allowed,false);
+ await assert.rejects(()=>db.query('select public.finish_oracle_dialogue($1,$2)',[request,{reply:'Fake AI reply',source:'ai'}]),/permission denied/);
+ await db.exec('reset role; set role service_role');
+ await db.query('select public.finish_oracle_dialogue($1,$2)',[request,{reply:'Keep your evidence.',source:'ai',reason:'Test'}]);
+ await db.exec('reset role; set role authenticated');
+ assert.equal((await reserve()).cached.reply,'Keep your evidence.');
+ assert.equal((await db.query('select public.my_oracle_dialogue($1) as r',[c])).rows[0].r.length,1);
+ // Simulate enough time passing without slowing the test, then enforce daily cap.
+ await db.exec("reset role; update oracle_private.dialogue set created_at=clock_timestamp()-interval '30 seconds'; update oracle_private.ai_limits set daily_limit=1; set role authenticated");
+ assert.match((await reserve(crypto.randomUUID())).reason,/daily/);
+ await db.exec('reset role; update oracle_private.ai_limits set daily_limit=40; set role authenticated');
+ for(let i=0;i<2;i++){assert.equal((await reserve(crypto.randomUUID())).allowed,true);await db.exec("reset role; update oracle_private.dialogue set created_at=clock_timestamp()-interval '30 seconds'; set role authenticated");}
+ assert.match((await reserve(crypto.randomUUID())).reason,/three/);
+ await db.query("select set_config('request.jwt.claim.sub',$1,false)",[other]);
+ await assert.rejects(()=>db.query('select public.my_oracle_dialogue($1)',[c]),/Join/);
+ await db.query("select public.join_course('long-random-test-code')");
+ assert.equal((await db.query('select public.my_oracle_dialogue($1) as r',[c])).rows[0].r.length,0);
+ await assert.rejects(()=>db.query('select public.reserve_oracle_dialogue($1,$2,$3)',[c,request,'Try to reuse another persons request.']),/unavailable/);
+ await db.query("select set_config('request.jwt.claim.sub',$1,false)",[uid]);
+ for(let i=7;i<=9;i++)await db.query('select public.submit_written_task($1,$2,$3,$4)',[c,i,'My judgment explains the institutional change in this assignment.',i===7?0:null]);
+ await db.query('select public.finish_game($1,$2)',[c,'The platform controlled recognition and payment. I would change the rules.']);
+ const records=(await db.query('select public.instructor_records() as r')).rows[0].r;
+ const row=records.find(r=>r.email==='teacher@example.test');assert.equal(row.responses[0].response,again.response);assert.equal(row.dialogue[0].reply,'Keep your evidence.');
+ await db.close();
+});

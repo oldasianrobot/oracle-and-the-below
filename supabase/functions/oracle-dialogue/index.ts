@@ -1,0 +1,32 @@
+import { createClient } from 'npm:@supabase/supabase-js@2';
+import { generateReply, fallbackReply } from './dialogue.js';
+const url=Deno.env.get('SUPABASE_URL')!;
+const publicKey=Deno.env.get('SUPABASE_ANON_KEY')!;
+const serviceKey=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const allowedOrigins=(Deno.env.get('ALLOWED_ORIGINS')||'').split(',').map(s=>s.trim()).filter(Boolean);
+Deno.serve(async(req:Request)=>{
+ const origin=req.headers.get('origin')||'';
+ const cors={'Access-Control-Allow-Origin':allowedOrigins.includes(origin)?origin:'null','Access-Control-Allow-Headers':'authorization, x-client-info, apikey, content-type','Access-Control-Allow-Methods':'POST, OPTIONS','Vary':'Origin'};
+ const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...cors,'Content-Type':'application/json'}});
+ if(origin&&!allowedOrigins.includes(origin))return json({error:'Origin not allowed.'},403);
+ if(req.method==='OPTIONS')return new Response(null,{status:204,headers:cors});
+ if(req.method!=='POST')return json({error:'Use POST.'},405);
+ const token=req.headers.get('Authorization')||'';
+ if(!token.startsWith('Bearer '))return json({error:'Sign in first.'},401);
+ const client=createClient(url,publicKey,{global:{headers:{Authorization:token}},auth:{persistSession:false}});
+ const {data:{user},error:authError}=await client.auth.getUser(token.slice(7));
+ if(authError||!user)return json({error:'Sign in first.'},401);
+ let body;
+ try{const text=await req.text();if(text.length>6000)throw new Error();body=JSON.parse(text);}catch{return json({error:'Invalid request.'},400);}
+ const {course_id,request_id,message,consent}=body;
+ if(consent!==true||typeof message!=='string'||message.trim().length<10||message.length>1200||typeof course_id!=='string'||typeof request_id!=='string')return json({error:'Confirm AI sharing and write 10–1,200 characters.'},400);
+ const {data:reservation,error}=await client.rpc('reserve_oracle_dialogue',{p_course:course_id,p_request:request_id,p_message:message.trim()});
+ if(error)return json({error:error.message},400);
+ if(reservation.cached)return json(reservation.cached);
+ if(!reservation.allowed)return json({reply:fallbackReply,source:'authored',reason:reservation.reason});
+ const result=await generateReply({key:Deno.env.get('OPENROUTER_API_KEY'),model:Deno.env.get('OPENROUTER_MODEL')||'openrouter/free',history:reservation.history||[],message:reservation.message});
+ const admin=createClient(url,serviceKey,{auth:{persistSession:false}});
+ const {error:saveError}=await admin.rpc('finish_oracle_dialogue',{p_request:request_id,p_result:result});
+ if(saveError)return json({reply:result.reply,source:result.source,reason:'Reply received, but conversation saving failed. Your assignment credit is already saved.'});
+ return json(result);
+});
