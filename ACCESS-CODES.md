@@ -34,7 +34,7 @@ Codes are generated with cryptographic randomness from 7,772 alphabetic entries 
 
 Login attempts have shared, transactional limits of 120 per minute and 1,000 per hour. These limits do not depend on client-supplied IP headers and cannot be evaded by trying different codes. They can temporarily affect legitimate sign-ins during an attack. No security system prevents students from voluntarily sharing their codes.
 
-Code expiry does not delete records. Set a course retention schedule with your institution; the game does not automatically delete submitted work. Keep private exports out of Git and the website. The repository’s `private/` directory is ignored by Git and excluded from both upload packages.
+Code expiry does not delete records. Set a course retention schedule with your institution; the game does not automatically delete submitted work. Keep private exports out of Git and the website. The repository’s `private/` directory is ignored by Git and excluded from the public build and upload package.
 
 ## Setup
 
@@ -46,13 +46,10 @@ The new function uses the existing server environment variables: `SUPABASE_URL`,
 
 ## Website paths
 
-- Educational projects page: `https://mleungphd.org/edutech/`
-- Game: `https://mleungphd.org/edutech/oracle/`
+- Game: `https://mleungphd.org/oracle/`
+- Hosting: independent `oracle-and-the-below` Vercel project. See [HOSTING.md](HOSTING.md).
 
-Run `npm run build`, then `python3 scripts/package-site.py`:
-
-- `edutech-upload.zip` contains `edutech/index.html` and `edutech/oracle/`. Extract it into the website’s public root.
-- `oracle-and-the-below-upload.zip` contains only the game files, for upload into an existing game directory.
+For a manual static copy, run `npm run build`, then `python3 scripts/package-site.py`. The ZIP contains only game files. The old educational projects landing page is no longer used.
 
 The instructor email sign-in still needs the final game address configured in Supabase’s Site URL and allowed redirect URLs when the site is published. Student code sign-in does not use an email redirect. Keep the localhost redirect during local review. The allowed AI/API origin remains `https://mleungphd.org`; URL paths do not change that origin.
 

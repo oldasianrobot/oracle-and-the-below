@@ -10,7 +10,7 @@ The visual edition adds real photographs, circled-object description, label corr
 - Device-local practice, ledger, reflection, downloadable receipt.
 - Private student codes, Supabase records, authoritative submissions, completion tracking, class totals, and instructor CSV implemented. Instructor access uses email-link sign-in.
 - Database functions tested in local PostgreSQL-compatible PGlite; full practice journey checked in the browser.
-- Supabase database, `oracle-dialogue`, and `oracle-access` functions installed in project `okprvvuvxjpcoydhjnds`; public connection settings configured. Instructor email sign-in and class ownership are verified. The instructor reported completing the game and receiving live AI replies. Student sign-in no longer uses email. The updated website has not yet been uploaded to the production host.
+- Supabase database, `oracle-dialogue`, and `oracle-access` functions installed in project `okprvvuvxjpcoydhjnds`; public connection settings configured. Instructor email sign-in and class ownership are verified. The instructor reported completing the game and receiving live AI replies. Student sign-in no longer uses email. The game is deployed in its own Vercel project; see [HOSTING.md](HOSTING.md).
 
 The private-code update is deployed to Supabase. Sixty codes were issued for Social Problems — Fall 2026. A live code login, reload, return login, sign-out, and unchecked MAX consent were verified. The private distribution CSV is excluded from Git and upload packages.
 
@@ -28,7 +28,7 @@ Student sign-in now uses private access codes. See [ACCESS-CODES.md](ACCESS-CODE
 
 For a new project, apply `backend/schema.sql`, `backend/outcomes.sql`, `backend/002-writing-and-dialogue.sql`, `backend/003-visual-max.sql`, then `backend/004-private-access.sql`. Deploy `oracle-dialogue` and `oracle-access`. Existing installations need only unapplied migrations. Preserve server secrets and use only the public Supabase connection settings in the website.
 
-The intended website addresses are `https://mleungphd.org/edutech/` and `https://mleungphd.org/edutech/oracle/`. Set the latter as the instructor sign-in destination when published. Students do not need email delivery. Run `python3 scripts/package-site.py` after building to prepare both the complete directory package and the game-only ZIP.
+The public game address is `https://mleungphd.org/oracle/`. Use this address for instructor email redirects. Students do not need email delivery. Vercel publishes pushes to this repository automatically; see [HOSTING.md](HOSTING.md).
 
 ## Grading and privacy
 

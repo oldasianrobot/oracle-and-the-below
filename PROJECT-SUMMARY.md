@@ -76,8 +76,8 @@ As of September 16, 2026:
 - Sixteen automated tests pass, covering accounting, submissions, access restrictions, completion, and AI behavior.
 - The revised database functions, private-code service, and MAX service are deployed to the connected Supabase project. Sixty private codes are prepared; live code sign-in, resume, and sign-out have been verified.
 - Existing saved class records are preserved. Unfinished records from an older edition cannot mix with the new assignment sequence.
-- A production build and upload ZIP are prepared. The updated website has not yet been uploaded to mleungphd.org.
-- Before classroom rollout, the website must be published at `/edutech/oracle/` and the final instructor sign-in address configured. Student code sign-in requires no email delivery.
+- Oracle has its own Vercel project, connected to this repository. The main website links to and routes the game at `https://mleungphd.org/oracle/`; see [HOSTING.md](HOSTING.md).
+- Before classroom rollout, the final instructor email sign-in address must be configured. Student code sign-in requires no email delivery.
 
 ## Related files
 
