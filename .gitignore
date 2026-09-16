@@ -9,3 +9,6 @@ tmp/
 
 # Private distribution lists and local provisioning artifacts: never publish.
 private/
+
+# Instructor distribution exports
+*student-codes*.csv

@@ -1,0 +1,16 @@
+{
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Oracle-Hosting",
+          "value": "oracle-and-the-below"
+        }
+      ]
+    }
+  ]
+}
