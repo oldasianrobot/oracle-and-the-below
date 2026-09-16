@@ -6,3 +6,6 @@ tmp/
 
 .DS_Store
 *-upload.zip
+
+# Private distribution lists and local provisioning artifacts: never publish.
+private/

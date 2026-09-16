@@ -8,9 +8,11 @@ The visual edition adds real photographs, circled-object description, label corr
 
 - Full nine-assignment game, three acts, three ending routes, four generated illustrations with crossfades.
 - Device-local practice, ledger, reflection, downloadable receipt.
-- Supabase email-link sign-in, class membership, authoritative submissions, completion records, class totals, instructor CSV implemented.
+- Private student codes, Supabase records, authoritative submissions, completion tracking, class totals, and instructor CSV implemented. Instructor access uses email-link sign-in.
 - Database functions tested in local PostgreSQL-compatible PGlite; full practice journey checked in the browser.
-- Supabase database and `oracle-dialogue` function installed in project `okprvvuvxjpcoydhjnds`; public connection settings configured. Instructor email sign-in and class ownership are verified. The instructor reported completing the game and receiving live AI replies. Classroom email delivery still requires verification. The updated website has not yet been uploaded to the production host.
+- Supabase database, `oracle-dialogue`, and `oracle-access` functions installed in project `okprvvuvxjpcoydhjnds`; public connection settings configured. Instructor email sign-in and class ownership are verified. The instructor reported completing the game and receiving live AI replies. Student sign-in no longer uses email. The updated website has not yet been uploaded to the production host.
+
+The private-code update is deployed to Supabase. Sixty codes were issued for Social Problems — Fall 2026. A live code login, reload, return login, sign-out, and unchecked MAX consent were verified. The private distribution CSV is excluded from Git and upload packages.
 
 ## Preview
 
@@ -22,26 +24,11 @@ The visual edition adds real photographs, circled-object description, label corr
 
 ## Activate classroom records
 
-1. Create a Supabase project under your own account. Review its current terms and pricing yourself before accepting them.
-2. Run `backend/schema.sql` once in that project's SQL Editor. Then run `backend/outcomes.sql`, followed by `backend/002-writing-and-dialogue.sql` and `backend/003-visual-max.sql`. Use a dedicated project or check for name conflicts before running migrations.
-3. In Authentication URL Configuration, set the final game URL (including trailing slash) as the Site URL and an allowed redirect. During local testing, additionally allow `http://127.0.0.1:5188/`. Remove that local redirect when no longer needed.
-4. Configure production email delivery in Supabase. Its default email service is restricted and is not suitable for a class of arbitrary recipients. Configure your own SMTP provider; verify delivery to a student test account. Check current limits and costs before enabling classroom use.
-5. Put the project's public URL and **publishable key** (or legacy anon key) in `public/config.js`, then rebuild. Alternatively edit `config.js` in the finished upload folder. **Never use a service-role key or secret key in browser files.** Public keys are protected by database permissions; changing the UI does not grant instructor access.
-6. Open the configured game and sign in using your instructor email. This creates your verified account.
-7. In the Supabase SQL Editor, create a course tied to that account, using this template with your exact email and a long random class code:
+Student sign-in now uses private access codes. See [ACCESS-CODES.md](ACCESS-CODES.md) for setup, code distribution, replacement, privacy, and the instructor workflow. Instructor access retains email-link authentication.
 
-```sql
-insert into public.oracle_courses(name, join_code, instructor_id)
-select 'Social Problems — Fall 2026', 'REPLACE-WITH-A-LONG-RANDOM-CLASS-CODE', id
-from auth.users where email = 'YOUR-INSTRUCTOR-EMAIL';
-```
+For a new project, apply `backend/schema.sql`, `backend/outcomes.sql`, `backend/002-writing-and-dialogue.sql`, `backend/003-visual-max.sql`, then `backend/004-private-access.sql`. Deploy `oracle-dialogue` and `oracle-access`. Existing installations need only unapplied migrations. Preserve server secrets and use only the public Supabase connection settings in the website.
 
-Check that one row was inserted. The class code is an invitation, not an identity credential. Distribute it through your LMS. Students authenticate their email and enter the code. No roster import or automatic LMS grade posting is included.
-
-8. On the signed-in join screen, select **Instructor records**. Export CSV for your gradebook. Only courses assigned to the authenticated account appear.
-9. Test two real student accounts before class: verify email links, ordered submissions, refresh/resume, reflection completion, class totals, instructor CSV, and denied instructor access for students.
-
-A class can be closed by setting `active = false` in `oracle_courses`; saved records remain readable but new work and completion are blocked. Deleting a course cascades to its participation records: export what you need first and apply your institution's retention requirements. Use the provider's dashboard for account/record administration.
+The intended website addresses are `https://mleungphd.org/edutech/` and `https://mleungphd.org/edutech/oracle/`. Set the latter as the instructor sign-in destination when published. Students do not need email delivery. Run `python3 scripts/package-site.py` after building to prepare both the complete directory package and the game-only ZIP.
 
 ## Grading and privacy
 
@@ -49,7 +36,7 @@ The visual edition records responses for all nine assignments. Most use writing 
 
 The app records completion, not an automatically awarded grade. Completion requires nine distinct ordered submissions plus a trimmed reflection of 40–5000 characters. This length check does not assess reflection quality. Earnings, speed, and response choices are not grading criteria. Instructors make final grading decisions.
 
-Signed-in records contain authenticated user ID, responses, submission dates, reflection, and completion date; the instructor view joins the verified account email. Students cannot read other students' identifiable records. Class totals expose aggregate contributions, fictional revenue, fictional payments, and completed count to class members. No public roster. Practice stores its own progress locally and never submits class records.
+Private-code records contain a worker ID, responses, submission dates, reflection, and completion date; the instructor keeps the name-to-ID mapping separately. Earlier email records are preserved. Students cannot read other students' identifiable records. Class totals expose aggregate contributions, fictional revenue, fictional payments, and completed count to class members. No public roster. Practice stores its own progress locally and never submits class records.
 
 A static page can always be inspected or automated by a determined student. Server-side sequence checks prevent forged totals and duplicate credit; this is a participation activity, not a proctored exam or proof of attention.
 
@@ -57,7 +44,7 @@ A static page can always be inspected or automated by a determined student. Serv
 
 Students interpret fictional evidence; only the optional MAX conversation calls an AI model when connected. The fixed ledger amounts and reform effects are invented for comparison. Revenue is not profit. Assignment 2 supplies a locomotive-label correction for comparison and fixed story pay; it does not automatically score free text. Assignments 4–6 each reject the work regardless of the selected judgments, demonstrating withheld standards; this is documented here for instructors, not explained in the in-game rejection. Assignment 7 offers a hypothetical individual branch, not an actual vote or a live negotiation among classmates. The outside review remains pending and releases no payment; negotiated prospective payment does not erase past rejections. The revised version offers 60 crowns total and pays 36 on route A or 24 on routes B/C.
 
-All four Oracle stages follow individual progress (0, 3, 6, 9 assignments). Class totals are cumulative and refreshed after submissions or on request. Crossfades respect reduced-motion preferences. No timer, sound, or student accounts are needed for practice.
+All four Oracle stages follow individual progress (0, 3, 6, 9 assignments). Class totals are cumulative and refreshed after submissions or on request. Crossfades respect reduced-motion preferences. No timer, sound, or sign-in is needed for practice.
 
 ## Source
 

@@ -1,5 +1,9 @@
 # Connect the free AI conversation
 
+## Private-code update
+
+Student email login is replaced by private access codes. Apply `backend/004-private-access.sql` and deploy `oracle-access` as described in [ACCESS-CODES.md](ACCESS-CODES.md). The new endpoint verifies a student code session before reserving AI usage; ordinary students never need an email account in Supabase. The original `oracle-dialogue` function remains for earlier authenticated records. Both paths share the same project-wide AI allowance.
+
 ## What is ready
 
 The visual edition records image descriptions, A/B/C shape choices, three beauty assignments with three judgments each, and the story-route selection. Choices and writing are stored together in the existing response field. AI consent is remembered per user/class on the same browser and may be withdrawn before a later message. From the first assignment, students can optionally converse with MAX. All ordinary assignments and the final reflection stay within the class database. Only messages students explicitly send to the MAX, plus earlier exchanges in that conversation, go to OpenRouter and the selected model provider.
@@ -8,7 +12,7 @@ Practice mode uses labeled authored dialogue and never calls OpenRouter. The liv
 
 ## Connected project status
 
-On September 15, 2026, all three SQL files were installed in project `okprvvuvxjpcoydhjnds`, and `oracle-dialogue` was deployed through the dashboard. The dashboard copy inlines `dialogue.js` into `index.ts`; the repository keeps the equivalent two-file source for CLI deployments. The legacy gateway JWT check is off; in-function user verification remains required. Allowed origins are configured for `https://mleungphd.org` and `http://127.0.0.1:5188`. The OpenRouter key has been saved by the project owner. An unauthenticated request to the deployed function returned the expected 401 with “Sign in first.” The temporary Auth Site URL is `http://127.0.0.1:5188/`; change this to the final hosted game address before classroom use. The instructor successfully followed the email sign-in link. The database confirms a verified instructor account and its ownership of Social Problems — Fall 2026. The instructor subsequently reported completing the game and receiving live AI replies. Custom SMTP is currently disabled, so classroom email delivery must be configured and tested before rollout.
+On September 15, 2026, all three SQL files were installed in project `okprvvuvxjpcoydhjnds`, and `oracle-dialogue` was deployed through the dashboard. The dashboard copy inlines `dialogue.js` into `index.ts`; the repository keeps the equivalent two-file source for CLI deployments. The legacy gateway JWT check is off; in-function user verification remains required. Allowed origins are configured for `https://mleungphd.org` and `http://127.0.0.1:5188`. The OpenRouter key has been saved by the project owner. An unauthenticated request to the deployed function returned the expected 401 with “Sign in first.” The temporary Auth Site URL is `http://127.0.0.1:5188/`; change this to the final hosted game address before classroom use. The instructor successfully followed the email sign-in link. The database confirms a verified instructor account and its ownership of Social Problems — Fall 2026. The instructor subsequently reported completing the game and receiving live AI replies. Custom SMTP was disabled at that check. Student code login no longer requires email delivery; instructor email-link access remains.
 
 ## 1. Prepare the database
 
@@ -70,7 +74,7 @@ Use a value consistent with your account's actual allowance and other usage. The
 - Confirm the reply says **AI reply** and the conversation is readable in instructor records. Confirm the ledger and participation totals did not change because of dialogue.
 - Test fallback and blocked fourth exchange. Check that a second student cannot see the first student's messages.
 - Inspect OpenRouter usage to confirm the actual model and zero charge.
-- Confirm the production domain is in the allowed origins, email-link redirect list, and email delivery works for actual student addresses.
+- Confirm the production domain is in the allowed origins, email-link redirect list, and instructor email delivery works.
 
 Student messages can influence the model despite role instructions. The model has no database tools, payment authority, or grading authority. The authoritative ledger is computed independently. Generated responses are rendered as escaped plain text, never executable HTML.
 

@@ -59,7 +59,7 @@ Four illustrated Oracle stages—Dormant, Awakening, Prosperous, and Magnificent
 
 ## Participation and class records
 
-Students sign in through an email link and enter a class code. Their responses, progress, reflection, and completion are saved for the instructor. A class display aggregates contributions, Oracle revenue, worker payments, and completions; classmates do not see one another’s identifiable responses.
+Students enter a private two-word access code plus four digits. No student name or email is collected. The instructor keeps the name-to-worker-ID roster separately. Their responses, progress, reflection, and completion are saved for the instructor. A class display aggregates contributions, Oracle revenue, worker payments, and completions; classmates do not see one another’s identifiable responses.
 
 The instructor can review participation, written work, optional conversations, and reflections, and export a gradebook CSV. Completing nine assignments and the reflection establishes the completion record. The instructor determines the final grade. The game does not automatically post grades to a learning management system.
 
@@ -67,20 +67,21 @@ Practice mode requires no account, saves progress on the current browser, and do
 
 ## Implementation and current status
 
-The project uses a lightweight JavaScript website built with Vite, Supabase for authentication and saved class records, and a protected Supabase function for the optional OpenRouter conversation. Ordinary assignments and reflections are not automatically sent to an AI provider. API secrets remain on the server.
+The project uses a lightweight JavaScript website built with Vite, Supabase for instructor authentication and saved class records, private code sessions for students, and a protected Supabase function for the optional OpenRouter conversation. Ordinary assignments and reflections are not automatically sent to an AI provider. API secrets remain on the server.
 
 As of September 16, 2026:
 
 - The revised visual edition is implemented and has been reviewed by the project owner in the local preview.
 - The nine-assignment practice journey and reflection have been checked in the browser.
-- Twelve automated tests pass, covering accounting, submissions, access restrictions, completion, and AI behavior.
-- The revised database functions and MAX service are deployed to the connected Supabase project.
+- Sixteen automated tests pass, covering accounting, submissions, access restrictions, completion, and AI behavior.
+- The revised database functions, private-code service, and MAX service are deployed to the connected Supabase project. Sixty private codes are prepared; live code sign-in, resume, and sign-out have been verified.
 - Existing saved class records are preserved. Unfinished records from an older edition cannot mix with the new assignment sequence.
 - A production build and upload ZIP are prepared. The updated website has not yet been uploaded to mleungphd.org.
-- Before classroom rollout, the final hosted sign-in address and student email delivery still need configuration and verification.
+- Before classroom rollout, the website must be published at `/edutech/oracle/` and the final instructor sign-in address configured. Student code sign-in requires no email delivery.
 
 ## Related files
 
+- [ACCESS-CODES.md](ACCESS-CODES.md): private student sign-in, distribution, and code replacement.
 - [README.md](README.md): operation, classroom setup, and teaching notes.
 - [AI-SETUP.md](AI-SETUP.md): MAX integration, privacy controls, and usage limits.
 - [ARTWORK.md](ARTWORK.md): Oracle illustration provenance.
