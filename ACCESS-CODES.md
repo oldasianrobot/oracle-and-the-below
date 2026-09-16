@@ -46,12 +46,12 @@ The new function uses the existing server environment variables: `SUPABASE_URL`,
 
 ## Website paths
 
-- Game: `https://mleungphd.org/oracle/`
+- Game: `https://oracle.mleungphd.org/`
 - Hosting: independent `oracle-and-the-below` Vercel project. See [HOSTING.md](HOSTING.md).
 
 For a manual static copy, run `npm run build`, then `python3 scripts/package-site.py`. The ZIP contains only game files. The old educational projects landing page is no longer used.
 
-The instructor email sign-in still needs the final game address configured in Supabase’s Site URL and allowed redirect URLs when the site is published. Student code sign-in does not use an email redirect. Keep the localhost redirect during local review. The allowed AI/API origin remains `https://mleungphd.org`; URL paths do not change that origin.
+The final game address is configured in Supabase’s Site URL and allowed redirect URLs. Student code sign-in does not use an email redirect. Keep the localhost redirect during local review. The allowed AI/API origins include `https://oracle.mleungphd.org`, the original main-site origin, and local review.
 
 ## Wordlist attribution
 

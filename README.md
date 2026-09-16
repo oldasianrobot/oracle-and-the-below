@@ -28,7 +28,7 @@ Student sign-in now uses private access codes. See [ACCESS-CODES.md](ACCESS-CODE
 
 For a new project, apply `backend/schema.sql`, `backend/outcomes.sql`, `backend/002-writing-and-dialogue.sql`, `backend/003-visual-max.sql`, then `backend/004-private-access.sql`. Deploy `oracle-dialogue` and `oracle-access`. Existing installations need only unapplied migrations. Preserve server secrets and use only the public Supabase connection settings in the website.
 
-The public game address is `https://mleungphd.org/oracle/`. Use this address for instructor email redirects. Students do not need email delivery. Vercel publishes pushes to this repository automatically; see [HOSTING.md](HOSTING.md).
+The public game address is `https://oracle.mleungphd.org/`. Use this address for instructor email redirects. Students do not need email delivery. Vercel publishes pushes to this repository automatically; see [HOSTING.md](HOSTING.md).
 
 ## Grading and privacy
 
