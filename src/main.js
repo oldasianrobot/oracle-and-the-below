@@ -5,6 +5,10 @@ import {access,studentSession,codeSignIn,codeSignOut,saveStudent} from './access
 import {writingPrompts} from './writing.js';
 import {authoredReplies} from '../supabase/functions/oracle-dialogue/dialogue.js';
 import {tasks,visuals,visualWrittenOutcome,encodeVisualResponse,isVisualResponse} from './visual.js';
+import { inject } from '@vercel/analytics';
+
+// Initialize Vercel Web Analytics
+inject();
 
 const app=document.querySelector('#app');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
