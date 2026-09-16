@@ -2,7 +2,7 @@
 
 ## What is ready
 
-The game now accepts students' written responses. Only assignment seven keeps a route selector, with a written explanation. After assignment six, students can optionally converse with the Help Moth. All ordinary assignments and the final reflection stay within the class database. Only messages students explicitly send to the Help Moth, plus earlier exchanges in that conversation, go to OpenRouter and the selected model provider.
+The visual edition records image descriptions, A/B/C shape choices, three independent beauty judgments, and the story-route selection. Choices and writing are stored together in the existing response field. AI consent is remembered per user/class on the same browser and may be withdrawn before a later message. After assignment six, students can optionally converse with the Help Moth. All ordinary assignments and the final reflection stay within the class database. Only messages students explicitly send to the Help Moth, plus earlier exchanges in that conversation, go to OpenRouter and the selected model provider.
 
 Practice mode uses labeled authored dialogue and never calls OpenRouter. The live integration requires the following setup. It has been tested with simulated provider responses and a local PostgreSQL-compatible database; a real account call remains to be verified after connection.
 

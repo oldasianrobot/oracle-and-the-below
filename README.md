@@ -4,7 +4,7 @@ A short, asynchronous classroom game about human labor behind AI. Built for uplo
 
 ## Current delivery status
 
-Version 1.1 adds written responses and an optional OpenRouter-powered payment appeal. See [AI setup](AI-SETUP.md) for the migration and protected server function.
+The visual edition adds real photographs, circled-object description, label correction, A/B/C shape selection, and a three-image beauty judgment. AI sharing consent is remembered per user and class on the same browser, with a withdrawal control. The optional OpenRouter-powered payment appeal remains. See [AI setup](AI-SETUP.md) for the migration and protected server function.
 
 - Full nine-assignment game, three acts, three ending routes, four generated illustrations with crossfades.
 - Device-local practice, ledger, reflection, downloadable receipt.
@@ -45,7 +45,7 @@ A class can be closed by setting `active = false` in `oracle_courses`; saved rec
 
 ## Grading and privacy
 
-Version 1.1 records written responses (10–2,000 characters) for all nine assignments. Assignment seven also retains a route selector because that choice drives the ending. Fixed story payments do not evaluate the writing. Optional AI exchanges do not affect completion or pay.
+The visual edition records responses for all nine assignments. Most use writing (10–1,500 characters); assignment three uses A/B/C shape selection, assignment four records three beauty judgments plus an explanation, and assignment seven retains a route selector because that choice drives the ending. Fixed story payments do not evaluate the writing. Optional AI exchanges do not affect completion or pay.
 
 The app records completion, not an automatically awarded grade. Completion requires nine distinct ordered submissions plus a trimmed reflection of 40–5000 characters. This length check does not assess reflection quality. Earnings, speed, and response choices are not grading criteria. Instructors make final grading decisions.
 
@@ -55,7 +55,7 @@ A static page can always be inspected or automated by a determined student. Serv
 
 ## Teaching notes
 
-Students interpret fictional evidence; only the optional Help Moth conversation calls an AI model when connected. The fixed ledger amounts and reform effects are invented for comparison. Revenue is not profit. Assignment 2 now offers an authored example for comparison and fixed story pay; it does not automatically score free text. Assignment 4 is an explicitly scripted rejection regardless of the written response, demonstrating withheld standards. Assignment 7 offers a hypothetical individual branch, not an actual vote or a live negotiation among classmates. An appeal can release prior approved pay without changing future rates; negotiated prospective payment does not erase past unpaid work.
+Students interpret fictional evidence; only the optional Help Moth conversation calls an AI model when connected. The fixed ledger amounts and reform effects are invented for comparison. Revenue is not profit. Assignment 2 supplies a locomotive-label correction for comparison and fixed story pay; it does not automatically score free text. Assignment 4 is an explicitly scripted rejection regardless of the three beauty judgments or written explanation, demonstrating withheld standards. Assignment 7 offers a hypothetical individual branch, not an actual vote or a live negotiation among classmates. An appeal can release prior approved pay without changing future rates; negotiated prospective payment does not erase past unpaid work.
 
 All four Oracle stages follow individual progress (0, 3, 6, 9 assignments). Class totals are cumulative and refreshed after submissions or on request. Crossfades respect reduced-motion preferences. No timer, sound, or student accounts are needed for practice.
 
@@ -75,3 +75,9 @@ Rebecca Tan and Regine Cabato, “Behind the AI boom, an army of overseas worker
 Edit `src/game.js`; run `node scripts/seed-outcomes.js`; review and apply the new `backend/outcomes.sql`; then rebuild. Existing saved responses retain their original results. For substantive task changes, create a new class/version rather than mixing versions in one graded cohort.
 
 Illustration provenance and prompts: `ARTWORK.md`.
+
+## Visual edition compatibility
+
+`src/visual.js` supplies the new prompts and presentation feedback; the original task definitions remain for interpreting earlier records. New responses include an edition marker, task title, and all selected labels in the existing response field. The server still controls fixed accounting and completion. No database reset or migration is required. Earlier records are not overwritten. Practice uses a new storage key, leaving old practice data intact. Use a new class for a new cohort rather than mixing editions within a graded cohort.
+
+Beauty judgments are subjective and receive a clearly explained scripted rejection regardless of the selections. Shape answers are recorded and followed by an authored explanation; no answer affects participation credit. Photographs include descriptive alternative text and full-size links. Image credits and reuse terms ship in `public/assignments/CREDITS.md` and appear alongside each photograph.
